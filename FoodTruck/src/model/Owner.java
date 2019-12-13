@@ -1,5 +1,9 @@
 package model;
 
+import model.exceptions.NoCookException;
+import model.exceptions.NoIngredientException;
+import model.exceptions.NotEnoughMoneyException;
+
 public class Owner {
 
     private String name;
@@ -11,21 +15,35 @@ public class Owner {
     }
 
     //getters
-    public String getName() { return name; }
-    public Kitchen getKitchen() { return kitchen; }
+    public String getName() {
+        return name;
+    }
+
+    public Kitchen getKitchen() {
+        return kitchen;
+    }
 
     // REQUIRES: we have enough ingredients to make the specified amount of tacos
     // MODIFIES: this
     // EFFECTS: calls makeTaco on the kitchen, returns true
     public boolean orderMoreTacos(int amount) {
-        kitchen.makeTaco(amount);
+        try {
+            kitchen.makeTaco(amount);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
         return true;
     }
 
     //MODIFIES: this 
     //EFFECTS: calls buyIngredients on the kitchen, returns true.
     public boolean askForMoreIngredients(int amount) {
-        this.kitchen.buyIngredients(amount);
+        try {
+            this.kitchen.buyIngredients(amount);
+        } catch (NotEnoughMoneyException e) {
+            return false;
+        }
         return true;
     }
 
